@@ -30,7 +30,7 @@ impl error::Error for Error {
         }
     }
 
-    fn cause(&self) -> Option<&error::Error> {
+    fn cause(&self) -> Option<&dyn error::Error> {
         match *self {
             Error::Other(ref err) => err.cause()
         }
@@ -84,7 +84,7 @@ impl CouchdbConnectionManager {
     /// Creates a new `CouchdbConnectionManager`.
     pub fn new(server_url: &str)
             -> Result<CouchdbConnectionManager, chill::Error> {
-        let _ = try!(server_url.into_url());
+        let _ = server_url.into_url()?;
         Ok(CouchdbConnectionManager {
             server_url: server_url.to_owned(),
         })
